@@ -1,4 +1,4 @@
-generator client {
+ generator client {
   provider = "prisma-client"
 }
 
@@ -20,9 +20,11 @@ model User {
   updatedAt      DateTime   @updatedAt
   lastLoginAt    DateTime?
   locationId     Int?
-  location       Location? @relation(fields: [locationId], references: [id])
+
+  location       Location?  @relation(fields: [locationId], references: [id])
 
   userRoles      UserRole[]
+  apartments     Apartment[]
 }
 
 model Role {
@@ -58,6 +60,58 @@ model Location {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  users User[]
+  users      User[]
+  apartments Apartment[]
 }
 
+model Apartment {
+  id          Int      @id @default(autoincrement())
+  ownerId     Int
+  locationId  Int
+  name        String
+  description String?
+  address     String?
+  totalRooms  Int
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User     @relation(fields: [ownerId], references: [id])
+  location    Location @relation(fields: [locationId], references: [id])
+
+  rooms       Room[]
+}
+
+model Room {
+  id            Int      @id @default(autoincrement())
+  apartmentId   Int
+  roomNumber    String
+  houseType     String
+  rent          Float
+  deposit       Float
+  currency      String   @default("KES")
+  status        String   @default("AVAILABLE")
+  availableFrom DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  apartment     Apartment @relation(fields: [apartmentId], references: [id])
+  roomAmenities RoomAmenity[]
+}
+
+model Amenity {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+
+  roomAmenities RoomAmenity[]
+}
+
+model RoomAmenity {
+  roomId    Int
+  amenityId Int
+
+  room      Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  amenity   Amenity @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@id([roomId, amenityId])
+}
