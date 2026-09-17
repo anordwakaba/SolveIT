@@ -1,0 +1,27 @@
+{
+  "name": "solveit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anordwakaba/SolveIT.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anordwakaba/SolveIT/issues"
+  },
+  "homepage": "https://github.com/anordwakaba/SolveIT#readme",
+  "devDependencies": {
+    "prisma": "^7.10.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.10.0",
+    "dotenv": "^17.4.2"
+  }
+}

@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             Int        @id @default(autoincrement())
+  fullName       String
+  username       String     @unique
+  email          String     @unique
+  phone          String?    @unique
+  passwordHash   String
+  status         String     @default("ACTIVE")
+  emailVerified  Boolean    @default(false)
+  phoneVerified  Boolean    @default(false)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  lastLoginAt    DateTime?
+  locationId     Int?
+  location       Location? @relation(fields: [locationId], references: [id])
+
+  userRoles      UserRole[]
+}
+
+model Role {
+  id          Int        @id @default(autoincrement())
+  name        String     @unique
+  description String?
+
+  userRoles   UserRole[]
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model Location {
+  id         Int      @id @default(autoincrement())
+  county     String
+  subCounty  String?
+  town       String?
+  area       String?
+  estate     String?
+  street     String?
+  landmark   String?
+  address    String?
+  latitude   Float?
+  longitude  Float?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  users User[]
+}
+
